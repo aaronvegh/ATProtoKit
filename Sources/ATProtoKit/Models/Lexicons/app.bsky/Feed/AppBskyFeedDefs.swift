@@ -351,6 +351,12 @@ extension AppBskyLexicon.Feed {
         /// post, this is the author of that post."
         public let grandparentAuthor: AppBskyLexicon.Actor.ProfileViewBasicDefinition?
 
+        enum CodingKeys: String, CodingKey {
+            case root
+            case parent
+            case grandparentAuthor
+        }
+
         // Unions
         /// The original post of the thread.
         public enum RootUnion: ATUnionProtocol, Equatable, Hashable {
@@ -368,10 +374,10 @@ extension AppBskyLexicon.Feed {
             case unknown(String, [String: CodableValue])
 
             public init(from decoder: Decoder) throws {
-                let container = try decoder.container(keyedBy: CodingKeys.self)
-                let type = try container.decode(String.self, forKey: .type)
-
-                switch type {
+                // Try to decode using the $type discriminator first
+                if let container = try? decoder.container(keyedBy: TypeCodingKeys.self),
+                   let type = try? container.decode(String.self, forKey: .type) {
+                    switch type {
                     case "app.bsky.feed.defs#postView":
                         self = .postView(try AppBskyLexicon.Feed.PostViewDefinition(from: decoder))
                     case "app.bsky.feed.defs#notFoundPost":
@@ -381,8 +387,18 @@ extension AppBskyLexicon.Feed {
                     default:
                         let singleValueDecodingContainer = try decoder.singleValueContainer()
                         let dictionary = try Self.decodeDictionary(from: singleValueDecodingContainer, decoder: decoder)
-
                         self = .unknown(type, dictionary)
+                    }
+                } else {
+                    // If no $type, try to decode as a regular PostViewDefinition
+                    do {
+                        self = .postView(try AppBskyLexicon.Feed.PostViewDefinition(from: decoder))
+                    } catch {
+                        // If that fails, create an unknown representation
+                        let singleValueDecodingContainer = try decoder.singleValueContainer()
+                        let dictionary = try Self.decodeDictionary(from: singleValueDecodingContainer, decoder: decoder)
+                        self = .unknown("app.bsky.feed.defs#postView", dictionary)
+                    }
                 }
             }
 
@@ -401,7 +417,7 @@ extension AppBskyLexicon.Feed {
                 }
             }
 
-            enum CodingKeys: String, CodingKey {
+            enum TypeCodingKeys: String, CodingKey {
                 case type = "$type"
             }
         }
@@ -422,10 +438,10 @@ extension AppBskyLexicon.Feed {
             case unknown(String, [String: CodableValue])
 
             public init(from decoder: Decoder) throws {
-                let container = try decoder.container(keyedBy: CodingKeys.self)
-                let type = try container.decode(String.self, forKey: .type)
-
-                switch type {
+                // Try to decode using the $type discriminator first
+                if let container = try? decoder.container(keyedBy: TypeCodingKeys.self),
+                   let type = try? container.decode(String.self, forKey: .type) {
+                    switch type {
                     case "app.bsky.feed.defs#postView":
                         self = .postView(try AppBskyLexicon.Feed.PostViewDefinition(from: decoder))
                     case "app.bsky.feed.defs#notFoundPost":
@@ -435,8 +451,18 @@ extension AppBskyLexicon.Feed {
                     default:
                         let singleValueDecodingContainer = try decoder.singleValueContainer()
                         let dictionary = try Self.decodeDictionary(from: singleValueDecodingContainer, decoder: decoder)
-
                         self = .unknown(type, dictionary)
+                    }
+                } else {
+                    // If no $type, try to decode as a regular PostViewDefinition
+                    do {
+                        self = .postView(try AppBskyLexicon.Feed.PostViewDefinition(from: decoder))
+                    } catch {
+                        // If that fails, create an unknown representation
+                        let singleValueDecodingContainer = try decoder.singleValueContainer()
+                        let dictionary = try Self.decodeDictionary(from: singleValueDecodingContainer, decoder: decoder)
+                        self = .unknown("app.bsky.feed.defs#postView", dictionary)
+                    }
                 }
             }
 
@@ -455,7 +481,7 @@ extension AppBskyLexicon.Feed {
                 }
             }
 
-            enum CodingKeys: String, CodingKey {
+            enum TypeCodingKeys: String, CodingKey {
                 case type = "$type"
             }
         }
@@ -742,6 +768,9 @@ extension AppBskyLexicon.Feed {
         /// The description of the feed generator. Optional.
         ///
         /// - Important: Current maximum length is 300 characters.
+        ///
+        /// - Note: According to the AT Protocol specifications: "Context provided by
+        /// feed generator that may be passed back alongside interactions."
         public let description: String?
 
         /// An array of the facets within the feed generator's description.
@@ -790,7 +819,7 @@ extension AppBskyLexicon.Feed {
             self.indexedAt = try container.decodeDate(forKey: .indexedAt)
         }
 
-        public func encode(to encoder: Encoder) throws {
+        public func encode(to encoder: any Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
 
             try container.encode(self.feedURI, forKey: .feedURI)
@@ -916,7 +945,7 @@ extension AppBskyLexicon.Feed {
                 }
             }
 
-            public func encode(to encoder: any Encoder) throws {
+            public func encode(to encoder: Encoder) throws {
                 var container = encoder.singleValueContainer()
 
                 switch self {
