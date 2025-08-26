@@ -768,9 +768,6 @@ extension AppBskyLexicon.Feed {
         /// The description of the feed generator. Optional.
         ///
         /// - Important: Current maximum length is 300 characters.
-        ///
-        /// - Note: According to the AT Protocol specifications: "Context provided by
-        /// feed generator that may be passed back alongside interactions."
         public let description: String?
 
         /// An array of the facets within the feed generator's description.
@@ -819,7 +816,7 @@ extension AppBskyLexicon.Feed {
             self.indexedAt = try container.decodeDate(forKey: .indexedAt)
         }
 
-        public func encode(to encoder: any Encoder) throws {
+        public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
 
             try container.encode(self.feedURI, forKey: .feedURI)
@@ -945,7 +942,7 @@ extension AppBskyLexicon.Feed {
                 }
             }
 
-            public func encode(to encoder: Encoder) throws {
+            public func encode(to encoder: any Encoder) throws {
                 var container = encoder.singleValueContainer()
 
                 switch self {
