@@ -13,7 +13,7 @@ import FoundationNetworking
 /// A lightweight, dependency-free ``ATIdentityProtocol`` conformer.
 ///
 /// This resolver maps a decentralized identifier (DID) to its Personal Data Server (PDS)
-/// service endpoint by fetching the DID document directly — without requiring ATIdentityTools
+/// service endpoint by fetching the DID document directly, without requiring ATIdentityTools
 /// or an authenticated session.
 ///
 /// It supports the `did:plc` and `did:web` methods. For richer identity handling (such as
@@ -59,10 +59,12 @@ public struct ATBuiltInIdentityResolver: ATIdentityProtocol {
         return service.serviceEndpoint.absoluteString
     }
 
-    /// Builds the DID-document URL for a supported DID method.
+    /// Builds the DID Document's URL for a supported decentralized identifier (DID) method.
     ///
     /// - Parameter did: The DID to build the document URL for.
     /// - Returns: The URL of the DID document.
+    ///
+    /// - Throws: An error if the DID is invalid or if the DID method is unsupported.
     private func didDocumentURL(for did: String) throws -> URL {
         if did.hasPrefix("did:plc:") {
             // did:plc:xxxx → https://plc.directory/did:plc:xxxx
