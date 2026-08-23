@@ -116,7 +116,7 @@ extension ToolsOzoneLexicon.Safelink {
     /// - SeeAlso: This is based on the [`tools.ozone.safelink.defs`][github] lexicon.
     ///
     /// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/tools/ozone/safelink/defs.json
-    public enum EventTypeDefinition: Sendable, Codable, ExpressibleByStringLiteral {
+    public enum EventTypeDefinition: Sendable, Codable, ATLexiconKnownValue {
 
         /// The event is for adding a rule.
         case addRule
@@ -143,15 +143,8 @@ extension ToolsOzoneLexicon.Safelink {
             }
         }
 
-        public init(stringLiteral value: String) {
-            self = .unknown(value)
-        }
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            let value = try container.decode(String.self)
-
-            switch value {
+        public init(rawValue: String) {
+            switch rawValue {
                 case "addRule":
                     self = .addRule
                 case "updateRule":
@@ -159,13 +152,8 @@ extension ToolsOzoneLexicon.Safelink {
                 case "removeRule":
                     self = .removeRule
                 default:
-                    self = .unknown(value)
+                    self = .unknown(rawValue)
             }
-        }
-
-        public func encode(to encoder: Encoder) throws {
-            var container = encoder.singleValueContainer()
-            try container.encode(self.rawValue)
         }
     }
 
@@ -174,7 +162,7 @@ extension ToolsOzoneLexicon.Safelink {
     /// - SeeAlso: This is based on the [`tools.ozone.safelink.defs`][github] lexicon.
     ///
     /// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/tools/ozone/safelink/defs.json
-    public enum PatternTypeDefinition: Sendable, Codable, ExpressibleByStringLiteral {
+    public enum PatternTypeDefinition: Sendable, Codable, ATLexiconKnownValue {
 
         /// The URL is the entire domain.
         case domain
@@ -184,10 +172,6 @@ extension ToolsOzoneLexicon.Safelink {
 
         /// An unknown value that the object may contain.
         case unknown(String)
-
-        public init(stringLiteral value: String) {
-            self = .unknown(value)
-        }
 
         public var rawValue: String {
             switch self {
@@ -200,23 +184,15 @@ extension ToolsOzoneLexicon.Safelink {
             }
         }
 
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            let value = try container.decode(String.self)
-
-            switch value {
+        public init(rawValue: String) {
+            switch rawValue {
                 case "domain":
                     self = .domain
                 case "url":
                     self = .url
                 default:
-                    self = .unknown(value)
+                    self = .unknown(rawValue)
             }
-        }
-
-        public func encode(to encoder: Encoder) throws {
-            var container = encoder.singleValueContainer()
-            try container.encode(self.rawValue)
         }
     }
 
@@ -225,7 +201,7 @@ extension ToolsOzoneLexicon.Safelink {
     /// - SeeAlso: This is based on the [`tools.ozone.safelink.defs`][github] lexicon.
     ///
     /// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/tools/ozone/safelink/defs.json
-    public enum ActionTypeDefinition: Sendable, Codable, ExpressibleByStringLiteral {
+    public enum ActionTypeDefinition: Sendable, Codable, ATLexiconKnownValue {
 
         /// The URL will be blocked.
         case block
@@ -238,10 +214,6 @@ extension ToolsOzoneLexicon.Safelink {
 
         /// An unknown value that the object may contain.
         case unknown(String)
-
-        public init(stringLiteral value: String) {
-            self = .unknown(value)
-        }
 
         public var rawValue: String {
             switch self {
@@ -256,11 +228,8 @@ extension ToolsOzoneLexicon.Safelink {
             }
         }
 
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            let value = try container.decode(String.self)
-
-            switch value {
+        public init(rawValue: String) {
+            switch rawValue {
                 case "block":
                     self = .block
                 case "warn":
@@ -268,13 +237,8 @@ extension ToolsOzoneLexicon.Safelink {
                 case "whitelist":
                     self = .whitelist
                 default:
-                    self = .unknown(value)
+                    self = .unknown(rawValue)
             }
-        }
-
-        public func encode(to encoder: Encoder) throws {
-            var container = encoder.singleValueContainer()
-            try container.encode(self.rawValue)
         }
     }
 
@@ -283,7 +247,7 @@ extension ToolsOzoneLexicon.Safelink {
     /// - SeeAlso: This is based on the [`tools.ozone.safelink.defs`][github] lexicon.
     ///
     /// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/tools/ozone/safelink/defs.json
-    public enum ReasonTypeDefinition: Sendable, Codable, ExpressibleByStringLiteral {
+    public enum ReasonTypeDefinition: Sendable, Codable, ATLexiconKnownValue {
 
         /// The URL is a CSAM website.
         case csam
@@ -300,10 +264,6 @@ extension ToolsOzoneLexicon.Safelink {
         /// An unknown value that the object may contain.
         case unknown(String)
 
-        public init(stringLiteral value: String) {
-            self = .unknown(value)
-        }
-
         public var rawValue: String {
             switch self {
                 case .csam:
@@ -319,11 +279,8 @@ extension ToolsOzoneLexicon.Safelink {
             }
         }
 
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            let value = try container.decode(String.self)
-
-            switch value {
+        public init(rawValue: String) {
+            switch rawValue {
                 case "csam":
                     self = .csam
                 case "spam":
@@ -333,7 +290,7 @@ extension ToolsOzoneLexicon.Safelink {
                 case "none":
                     self = .none
                 default:
-                    self = .unknown(value)
+                    self = .unknown(rawValue)
             }
         }
     }

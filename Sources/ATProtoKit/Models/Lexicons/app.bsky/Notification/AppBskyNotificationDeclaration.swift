@@ -57,7 +57,7 @@ extension AppBskyLexicon.Notification {
 
         // Enums
         /// A setting that determines the group of user accounts that can subscribe to their activity.
-        public enum AllowSubscriptions: Sendable, Codable, Equatable, Hashable, ExpressibleByStringLiteral {
+        public enum AllowSubscriptions: Sendable, Codable, Equatable, Hashable, ATLexiconKnownValue {
 
             /// Those who are following the user account can subscribe.
             case followers
@@ -85,15 +85,8 @@ extension AppBskyLexicon.Notification {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .unknown(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "followers":
                         self = .followers
                     case "mutuals":
@@ -101,13 +94,8 @@ extension AppBskyLexicon.Notification {
                     case "none":
                         self = .none
                     default:
-                        self = .unknown(value)
+                        self = .unknown(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
     }

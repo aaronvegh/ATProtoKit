@@ -886,7 +886,7 @@ extension ToolsOzoneLexicon.Moderation {
 
         // Enums
         /// The current state for the user account with respect to age assurance.
-        public enum AgeAssuranceState: Sendable, Codable, ExpressibleByStringLiteral {
+        public enum AgeAssuranceState: Sendable, Codable, ATLexiconKnownValue {
 
             /// The state is pending.
             case pending
@@ -924,15 +924,8 @@ extension ToolsOzoneLexicon.Moderation {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .customString(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "pending":
                         self = .pending
                     case "assured":
@@ -944,18 +937,13 @@ extension ToolsOzoneLexicon.Moderation {
                     case "blocked":
                         self = .blocked
                     default:
-                        self = .customString(value)
+                        self = .customString(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
 
         /// Whether the age assurance update was done by the user account or an admin.
-        public enum AgeAssuranceUpdatedBy: Sendable, Codable, ExpressibleByStringLiteral {
+        public enum AgeAssuranceUpdatedBy: Sendable, Codable, ATLexiconKnownValue {
 
             /// The age assurance update was updated by an admin.
             case admin
@@ -978,27 +966,15 @@ extension ToolsOzoneLexicon.Moderation {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .customString(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "admin":
                         self = .admin
                     case "user":
                         self = .user
                     default:
-                        self = .customString(value)
+                        self = .customString(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
 
@@ -1767,7 +1743,7 @@ extension ToolsOzoneLexicon.Moderation {
 
         // Enums
         /// The age assurance flow's status.
-        public enum Status: Sendable, Codable, ExpressibleByStringLiteral {
+        public enum Status: Sendable, Codable, ATLexiconKnownValue {
 
             /// The status is unknown.
             case unknown
@@ -1795,15 +1771,8 @@ extension ToolsOzoneLexicon.Moderation {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .customString(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "unknown":
                         self = .unknown
                     case "pending":
@@ -1811,13 +1780,8 @@ extension ToolsOzoneLexicon.Moderation {
                     case "assured":
                         self = .assured
                     default:
-                        self = .customString(value)
+                        self = .customString(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
     }
@@ -1844,7 +1808,7 @@ extension ToolsOzoneLexicon.Moderation {
 
         // Enums
         /// The status set by the moderator, overriding the status of the user account.
-        public enum Status: Sendable, Codable, ExpressibleByStringLiteral {
+        public enum Status: Sendable, Codable, ATLexiconKnownValue {
 
             /// The status is assured.
             case assured
@@ -1872,15 +1836,8 @@ extension ToolsOzoneLexicon.Moderation {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .customString(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "assured":
                         self = .assured
                     case "reset":
@@ -1888,13 +1845,8 @@ extension ToolsOzoneLexicon.Moderation {
                     case "blocked":
                         self = .blocked
                     default:
-                        self = .customString(value)
+                        self = .customString(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
     }

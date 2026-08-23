@@ -32,7 +32,7 @@ extension ChatBskyLexicon.Notification {
 
         // Enums
         /// A filter of which conversations trigger push notifications.
-        public enum Include: Sendable, Codable, ExpressibleByStringLiteral {
+        public enum Include: Sendable, Codable, ATLexiconKnownValue {
 
             /// Include notifications from all conversations.
             case all
@@ -54,27 +54,15 @@ extension ChatBskyLexicon.Notification {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .unknown(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "all":
                         self = .all
                     case "follows":
                         self = .follows
                     default:
-                        self = .unknown(value)
+                        self = .unknown(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
     }

@@ -79,7 +79,7 @@ extension AppBskyLexicon.Actor {
 
         // Enums
         /// The status of the user account.
-        public enum Status: Sendable, Codable, Equatable, Hashable, ExpressibleByStringLiteral {
+        public enum Status: Sendable, Codable, Equatable, Hashable, ATLexiconKnownValue {
 
             /// The status of the user account is "live."
             ///
@@ -98,24 +98,13 @@ extension AppBskyLexicon.Actor {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .unknown(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "app.bsky.actor.status#live":
                         self = .live
                     default:
-                        self = .unknown(value)
+                        self = .unknown(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
 

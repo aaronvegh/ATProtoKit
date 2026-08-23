@@ -317,7 +317,7 @@ extension AppBskyLexicon.Unspecced {
         }
 
         // Enums
-        public enum Status: Sendable, Codable, ExpressibleByStringLiteral {
+        public enum Status: Sendable, Codable, ATLexiconKnownValue {
 
             /// The status is unknown.
             case unknown
@@ -350,15 +350,8 @@ extension AppBskyLexicon.Unspecced {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .customString(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "unknown":
                         self = .unknown
                     case "pending":
@@ -368,13 +361,8 @@ extension AppBskyLexicon.Unspecced {
                     case "blocked":
                         self = .blocked
                     default:
-                        self = .customString(value)
+                        self = .customString(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
     }
@@ -489,7 +477,7 @@ extension AppBskyLexicon.Unspecced {
 
         // Enums
         /// The age assurance flow's status.
-        public enum Status: Sendable, Codable, ExpressibleByStringLiteral {
+        public enum Status: Sendable, Codable, ATLexiconKnownValue {
 
             /// The status is unknown.
             case unknown
@@ -517,15 +505,8 @@ extension AppBskyLexicon.Unspecced {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .customString(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "unknown":
                         self = .unknown
                     case "pending":
@@ -533,13 +514,8 @@ extension AppBskyLexicon.Unspecced {
                     case "assured":
                         self = .assured
                     default:
-                        self = .customString(value)
+                        self = .customString(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
     }
