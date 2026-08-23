@@ -17,3 +17,26 @@ public protocol ATLexiconKnownValue: RawRepresentable, Codable, Equatable, Expre
     /// - Parameter rawValue: The `String` value to input.
     init(rawValue: String)
 }
+
+extension ATLexiconKnownValue {
+
+    /// Creates the value from a `String` literal.
+    ///
+    /// - Parameter stringLiteral: The string value used to initialize the type from a string literal.
+    public init(stringLiteral value: String) {
+        self.init(rawValue: value)
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        let rawValue = try container.decode(String.self)
+        self.init(rawValue: rawValue)
+    }
+
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        try container.encode(rawValue)
+    }
+}
