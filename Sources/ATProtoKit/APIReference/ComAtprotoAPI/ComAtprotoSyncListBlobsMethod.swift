@@ -38,7 +38,9 @@ extension ATProtoKit {
         limit: Int? = 500,
         cursor: String? = nil
     ) async throws -> ComAtprotoLexicon.Sync.ListBlobsOutput {
-        guard let requestURL = URL(string: "https://bsky.network/xrpc/com.atproto.sync.listBlobs") else {
+        let host = try await self.atidentityResolver.resolvePDSEndpoint(from: repositoryDID)
+
+        guard let requestURL = URL(string: "https://\(host)/xrpc/com.atproto.sync.listBlobs") else {
             throw ATRequestPrepareError.invalidRequestURL
         }
 
