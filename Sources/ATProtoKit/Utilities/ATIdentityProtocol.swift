@@ -21,7 +21,7 @@
 /// \
 /// If you prefer to use your own Swift package or code for identity resolution, refer to the
 /// article “Resolve Identities With ATIdentityProtocol”.
-public protocol ATIdentityProtocol {
+public protocol ATIdentityProtocol: Sendable {
 
     /// Retireves the user account's Personal Data Server (PDS) service endpoint by its
     /// decentralized identifier (DID).
