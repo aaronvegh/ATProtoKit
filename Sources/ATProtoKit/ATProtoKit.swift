@@ -152,6 +152,9 @@ public final class ATProtoKit: Sendable, ATProtoKitConfiguration, ATRecordConfig
     /// An instance of ``APIClientService`` to perform requests.
     public let apiClientService: APIClientService
 
+    /// An instance of ``ATIdentityProtocol`` to perform Personal Data Server (PDS) resolutions.
+    public let atidentityResolver: ATIdentityProtocol
+
     /// Initializes a new, asyncronous instance of `ATProtoKit`.
     ///
     /// This will also handle some of the logging-related setup. The identifier will either be your
@@ -168,6 +171,8 @@ public final class ATProtoKit: Sendable, ATProtoKitConfiguration, ATRecordConfig
     /// - Parameters:
     ///   - sessionConfiguration: The authenticated user session within the AT Protocol. Optional.
     ///   - apiClientConfiguration: An ``APIClientConfiguration`` object. Optional.
+    ///   - atidentityResolver: An instance of ``ATIdentityProtocol`` to perform
+    ///   Personal Data Server (PDS) resolutions. Defaults to ``ATBuiltInIdentityResolver``.
     ///   Defaults to `nil`. When `sessionConfiguration` supplies an executor that owns OAuth
     ///   authorization, that executor takes precedence over this configuration's response provider.
     ///   - pdsURL: The URL of the Personal Data Server (PDS). Defaults to ``APIHostname/bskyAppView``.
@@ -176,6 +181,7 @@ public final class ATProtoKit: Sendable, ATProtoKitConfiguration, ATRecordConfig
     public init(
         sessionConfiguration: SessionConfiguration? = nil,
         apiClientConfiguration: APIClientConfiguration? = nil,
+        atidentityResolver: some ATIdentityProtocol = ATBuiltInIdentityResolver(),
         pdsURL: String = APIHostname.bskyAppView,
         canUseBlueskyRecords: Bool = true
     ) async {
@@ -196,6 +202,8 @@ public final class ATProtoKit: Sendable, ATProtoKitConfiguration, ATRecordConfig
             with: finalConfiguration
         )
 
+        self.atidentityResolver = atidentityResolver
+
         let areBlueskyRecordsRegistered = await ATRecordTypeRegistry.areBlueskyRecordsRegistered
         if canUseBlueskyRecords && !areBlueskyRecordsRegistered {
             _ = await ATRecordTypeRegistry.shared.register(blueskyLexiconTypes: recordLexicons)
@@ -212,6 +220,8 @@ public final class ATProtoKit: Sendable, ATProtoKitConfiguration, ATRecordConfig
     /// - Parameters:
     ///   - sessionConfiguration: The external OAuth session configuration to register and use.
     ///   - apiClientConfiguration: Additional API client configuration. Optional. Defaults to `nil`.
+    ///   - atidentityResolver: An instance of ``ATIdentityProtocol`` to perform
+    ///   Personal Data Server (PDS) resolutions. Defaults to ``ATBuiltInIdentityResolver``.
     ///   - canUseBlueskyRecords: Indicates whether Bluesky lexicon record types should be registered.
     ///     Defaults to `true`.
     /// - Returns: An authenticated ATProtoKit client using the registered OAuth session.
@@ -220,6 +230,7 @@ public final class ATProtoKit: Sendable, ATProtoKitConfiguration, ATRecordConfig
     public static func createOAuthSession(
         sessionConfiguration: ATOAuthSessionConfiguration,
         apiClientConfiguration: APIClientConfiguration? = nil,
+        atidentityResolver: some ATIdentityProtocol = ATBuiltInIdentityResolver(),
         canUseBlueskyRecords: Bool = true
     ) async throws -> ATProtoKit {
         try await sessionConfiguration.registerSession()
@@ -232,6 +243,7 @@ public final class ATProtoKit: Sendable, ATProtoKitConfiguration, ATRecordConfig
         return await ATProtoKit(
             sessionConfiguration: sessionConfiguration,
             apiClientConfiguration: apiClientConfiguration,
+            atidentityResolver: atidentityResolver,
             pdsURL: context.serviceEndpoint.absoluteString,
             canUseBlueskyRecords: canUseBlueskyRecords
         )

@@ -159,7 +159,7 @@ extension AppBskyLexicon.Notification {
 
         // Enums
         /// The kind of notification received.
-        public enum Reason: Sendable, Codable, Equatable, ExpressibleByStringLiteral {
+        public enum Reason: Sendable, Codable, Equatable, ATLexiconKnownValue {
 
             /// Indicates the notification is about someone liking a post from the user account.
             case like
@@ -234,15 +234,8 @@ extension AppBskyLexicon.Notification {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .unknown(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "like":
                         self = .like
                     case "repost":
@@ -268,13 +261,8 @@ extension AppBskyLexicon.Notification {
                     case "subscribed-post":
                         self = .subscribedPost
                     default:
-                        self = .unknown(value)
+                        self = .unknown(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
     }

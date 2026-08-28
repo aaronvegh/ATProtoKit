@@ -124,15 +124,6 @@ ATProtoKit is fully open source under the [MIT license](https://github.com/Maste
 
 }
 
-### Identifiers and Schemes
-
-- <doc:ATProtoIdentifiers>
-- ``ATURIManager``
-- ``DIDManager``
-- ``HandleManager``
-- ``NSIDManager``
-- ``RecordKeyManager``
-
 ### Event Streams
 
 - ``ATEventStreamConfiguration``
@@ -165,6 +156,7 @@ ATProtoKit is fully open source under the [MIT license](https://github.com/Maste
 - ``ATFacetParser``
 - ``SessionToken``
 - ``ATRecordDecoder``
+- ``ATLexiconKnownValue``
 - ``ATBuiltInIdentityResolver``
 - ``AttachmentLexiconLimit``
 - ``Truncatable``

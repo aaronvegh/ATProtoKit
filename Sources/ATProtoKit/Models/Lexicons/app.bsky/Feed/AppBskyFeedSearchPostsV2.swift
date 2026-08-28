@@ -39,7 +39,7 @@ extension AppBskyLexicon.Feed {
         /// - SeeAlso: This is based on the [`app.bsky.feed.searchPostsV2`][github] lexicon.
         ///
         /// [github]: https://github.com/bluesky-social/atproto/blob/main/lexicons/app/bsky/feed/searchPostsV2.json
-        public enum QueryLanguage: Sendable, Codable, ExpressibleByStringLiteral {
+        public enum QueryLanguage: Sendable, Codable, ATLexiconKnownValue {
 
             /// Japanese.
             case japanese
@@ -76,15 +76,8 @@ extension AppBskyLexicon.Feed {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .unknown(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "ja":
                         self = .japanese
                     case "zh":
@@ -96,13 +89,8 @@ extension AppBskyLexicon.Feed {
                     case "ar":
                         self = .arabic
                     default:
-                        self = .unknown(value)
+                        self = .unknown(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
     }

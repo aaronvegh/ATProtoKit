@@ -33,7 +33,9 @@ extension ATProtoKit {
         by did: String,
         sinceRevision: String? = nil
     ) async throws -> Data {
-        guard let requestURL = URL(string: "https://bsky.network/xrpc/com.atproto.sync.getRepo") else {
+        let host = try await self.atidentityResolver.resolvePDSEndpoint(from: did)
+
+        guard let requestURL = URL(string: "https://\(host)/xrpc/com.atproto.sync.getRepo") else {
             throw ATRequestPrepareError.invalidRequestURL
         }
 

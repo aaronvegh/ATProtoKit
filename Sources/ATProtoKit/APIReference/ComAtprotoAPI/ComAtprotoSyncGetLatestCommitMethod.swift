@@ -48,7 +48,7 @@ extension ATProtoKit {
             let request = apiClientService.createRequest(
                 forRequest: queryURL,
                 andMethod: .get,
-                acceptValue: "application/vnd.ipld.car",
+                acceptValue: "application/json",
                 contentTypeValue: nil,
                 authorizationValue: nil
             )

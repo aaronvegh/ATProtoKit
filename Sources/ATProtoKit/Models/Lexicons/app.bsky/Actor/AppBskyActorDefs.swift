@@ -516,7 +516,7 @@ extension AppBskyLexicon.Actor {
 
         // Enums
         /// Determines what kind of subsciptions are allowed.
-        public enum AllowSubscriptions: Sendable, Codable, Equatable, Hashable, ExpressibleByStringLiteral {
+        public enum AllowSubscriptions: Sendable, Codable, Equatable, Hashable, ATLexiconKnownValue {
 
             /// Those who are following the user account can subscribe.
             case followers
@@ -544,15 +544,8 @@ extension AppBskyLexicon.Actor {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .unknown(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "followers":
                         self = .followers
                     case "mutuals":
@@ -560,13 +553,8 @@ extension AppBskyLexicon.Actor {
                     case "none":
                         self = .none
                     default:
-                        self = .unknown(value)
+                        self = .unknown(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
     }
@@ -1064,7 +1052,7 @@ extension AppBskyLexicon.Actor {
         }
 
         /// Determines how visible a label's content is.
-        public enum Visibility: Sendable, Codable, Equatable, Hashable, ExpressibleByStringLiteral {
+        public enum Visibility: Sendable, Codable, Equatable, Hashable, ATLexiconKnownValue {
 
             /// Indicates the content can be ignored.
             case ignore
@@ -1096,18 +1084,9 @@ extension AppBskyLexicon.Actor {
                         return value
                 }
             }
-            
-            public init(stringLiteral value: String) {
-                self = .unknown(value)
-            }
-            
-            // Implement custom decoding
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
 
-                let value = try container.decode(String.self)
-                
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "ignore":
                         self = .ignore
                     case "show":
@@ -1117,13 +1096,8 @@ extension AppBskyLexicon.Actor {
                     case "hide":
                         self = .hide
                     default:
-                        self = .unknown(value)
-                    }
-            }
-            
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
+                        self = .unknown(rawValue)
+                }
             }
         }
     }
@@ -1177,7 +1151,7 @@ extension AppBskyLexicon.Actor {
             self.value = try container.decode(String.self, forKey: .value)
             self.isPinned = try container.decode(Bool.self, forKey: .isPinned)
         }
-        
+
         public func encode(to encoder: any Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(self.feedID, forKey: .feedID)
@@ -1185,12 +1159,12 @@ extension AppBskyLexicon.Actor {
             try container.encode(self.value, forKey: .value)
             try container.encode(self.isPinned, forKey: .isPinned)
         }
-        
+
         /// The type of feed generator.
         ///
         /// This is usually referring to the location of the feed in context to the
         /// user account's choice of placement within Bluesky.
-        public enum FeedType: Sendable, Codable, Equatable, Hashable, ExpressibleByStringLiteral {
+        public enum FeedType: Sendable, Codable, Equatable, Hashable, ATLexiconKnownValue {
 
             /// Indicates the feed generator resides only in the "Feeds" section of Bluesky.
             case feed
@@ -1219,17 +1193,8 @@ extension AppBskyLexicon.Actor {
                 }
             }
             
-            public init(stringLiteral value: String) {
-                self = .unknown(value)
-            }
-            
-            // Implement custom decoding
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-
-                let value = try container.decode(String.self)
-                
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "feed":
                         self = .feed
                     case "list":
@@ -1237,13 +1202,8 @@ extension AppBskyLexicon.Actor {
                     case "timeline":
                         self = .timeline
                     default:
-                        self = .unknown(value)
-                    }
-            }
-            
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
+                        self = .unknown(rawValue)
+                }
             }
         }
 
@@ -1496,7 +1456,7 @@ extension AppBskyLexicon.Actor {
         public let areFollowedUsersPrioritized: Bool?
         
         /// The sorting mode for a thread.
-        public enum SortingMode: Sendable, Codable, Equatable, Hashable, ExpressibleByStringLiteral {
+        public enum SortingMode: Sendable, Codable, Equatable, Hashable, ATLexiconKnownValue {
 
             /// Indicates the thread will be sorted from the oldest post.
             case oldest
@@ -1545,17 +1505,8 @@ extension AppBskyLexicon.Actor {
                 }
             }
             
-            public init(stringLiteral value: String) {
-                self = .unknown(value)
-            }
-
-            // Implement custom decoding
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-
-                let value = try container.decode(String.self)
-                
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "oldest":
                         self = .oldest
                     case "newest":
@@ -1569,13 +1520,8 @@ extension AppBskyLexicon.Actor {
                     case "top":
                         self = .top
                     default:
-                        self = .unknown(value)
-                    }
-            }
-            
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
+                        self = .unknown(rawValue)
+                }
             }
         }
         
@@ -1772,7 +1718,7 @@ extension AppBskyLexicon.Actor {
         }
 
         /// An array of user accounts that the muted word applies to.
-        public enum ActorTarget: Sendable, Codable, Equatable, Hashable, ExpressibleByStringLiteral {
+        public enum ActorTarget: Sendable, Codable, Equatable, Hashable, ATLexiconKnownValue {
 
             /// The muted word applies to everyone.
             case all
@@ -1795,29 +1741,15 @@ extension AppBskyLexicon.Actor {
                 }
             }
             
-            public init(stringLiteral value: String) {
-                self = .unknown(value)
-            }
-
-            // Implement custom decoding
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-
-                let value = try container.decode(String.self)
-                
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "all":
                         self = .all
                     case "exclude-following":
                         self = .excludeFollowing
                     default:
-                        self = .unknown(value)
-                    }
-            }
-            
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
+                        self = .unknown(rawValue)
+                }
             }
         }
     }
@@ -2524,7 +2456,7 @@ extension AppBskyLexicon.Actor {
 
         // Enums
         /// The status of the user account.
-        public enum Status: Sendable, Codable, Equatable, Hashable, ExpressibleByStringLiteral {
+        public enum Status: Sendable, Codable, Equatable, Hashable, ATLexiconKnownValue {
 
             /// The status of the user account is "live."
             ///
@@ -2545,25 +2477,13 @@ extension AppBskyLexicon.Actor {
                 }
             }
 
-            public init(stringLiteral value: String) {
-                self = .unknown(value)
-            }
-
-            public init(from decoder: Decoder) throws {
-                let container = try decoder.singleValueContainer()
-                let value = try container.decode(String.self)
-
-                switch value {
+            public init(rawValue: String) {
+                switch rawValue {
                     case "app.bsky.actor.status#live":
                         self = .live
                     default:
-                        self = .unknown(value)
+                        self = .unknown(rawValue)
                 }
-            }
-
-            public func encode(to encoder: Encoder) throws {
-                var container = encoder.singleValueContainer()
-                try container.encode(self.rawValue)
             }
         }
 
